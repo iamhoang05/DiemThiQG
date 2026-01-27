@@ -33,4 +33,4 @@ BEGIN
     SET @i = @i + 1;
 END;
 
-SELECT * FROM ThiSinh
+

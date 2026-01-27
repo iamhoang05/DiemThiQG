@@ -33,5 +33,3 @@ BEGIN
     SET @i = @i + 1;
 END;
 
-SELECT * FROM ThiSinh
-Where SBD = 783
