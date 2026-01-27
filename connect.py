@@ -5,7 +5,7 @@ conn = pyodbc.connect(
     "SERVER=localhost,1433;"
     "DATABASE=master;"
     "UID=sa;"
-    "PWD=Hoangnguyen712@;"
+    "PWD=Matkhau;"
     "TrustServerCertificate=yes;"
 )
 
@@ -13,14 +13,14 @@ NODE_BAC = {
     "server": "localhost,1433",
     "database": "THISINH_BAC",
     "user": "sa",
-    "password": "Hoangnguyen712@"
+    "password": "Matkhau"
 }
 
 NODE_NAM = {
     "server": "localhost,1433",
     "database": "THISINH_NAM",
     "user": "sa",
-    "password": "Hoangnguyen712@"
+    "password": "Matkhau"
 }
 
 DRIVER = "ODBC Driver 17 for SQL Server"
