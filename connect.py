@@ -24,5 +24,5 @@ NODE_NAM = {
 }
 
 DRIVER = "ODBC Driver 17 for SQL Server"
-print("✅ CONNECT OK")
+print("CONNECT OK")
 conn.close()
