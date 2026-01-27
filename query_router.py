@@ -8,7 +8,7 @@ def get_connection(node):
         f"SERVER={node['server']};"
         f"DATABASE={node['database']};"
         f"UID=sa;"
-        f"PWD=Matkhau;"
+        f"PWD=Hoangnguyen712@;"
         f"TrustServerCertificate=yes;"
     )
 
