@@ -24,5 +24,5 @@ while True:
             print("Sinh:", result[7])
 
     except Exception as e:
-        print(f"❌ Lỗi kết nối: {e}")
+        print(f"Lỗi kết nối: {e}")
 
