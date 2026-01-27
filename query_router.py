@@ -8,7 +8,7 @@ def get_connection(node):
         f"SERVER={node['server']};"
         f"DATABASE={node['database']};"
         f"UID=sa;"
-        f"PWD=Hoangnguyen712@;"
+        f"PWD=Matkhau;"
         f"TrustServerCertificate=yes;"
     )
 
@@ -30,11 +30,11 @@ def get_score(sbd):
         return "SBD không hợp lệ!"
 
     try:
-        print(f"🔍 Đang kết nối tới {node['database']} ...")
+        print(f"Đang kết nối tới {node['database']} ...")
 
         conn = get_connection(node)
 
-        print(f"✅ Kết nối {node['database']} thành công!")
+        print(f"Kết nối {node['database']} thành công!")
 
         cursor = conn.cursor()
 
@@ -51,10 +51,10 @@ def get_score(sbd):
         if row:
             return row  
         else:
-            return "⚠️ Không tìm thấy thí sinh này trong dữ liệu."
+            return "Không tìm thấy thí sinh này trong dữ liệu."
 
     except Exception as e:
-        print(f"❌ Lỗi khi kết nối {node['database']}: {repr(e)}")
+        print(f"Lỗi khi kết nối {node['database']}: {repr(e)}")
 
 
 
