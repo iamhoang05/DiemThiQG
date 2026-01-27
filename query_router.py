@@ -8,7 +8,7 @@ def get_connection(node):
         f"SERVER={node['server']};"
         f"DATABASE={node['database']};"
         f"UID=sa;"
-        f"PWD=Hoangnguyen712@"
+        f"PWD=Hoangnguyen712@;"
         f"TrustServerCertificate=yes;"
     )
 
@@ -37,9 +37,21 @@ def get_score(sbd):
         print(f"✅ Kết nối {node['database']} thành công!")
 
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM THISINH WHERE SBD = ?", sbd)
+
+        query = """
+            SELECT HoTen, KhuVuc, DiemToan, DiemVan, DiemAnh, DiemLy, DiemHoa, DiemSinh 
+            FROM ThiSinh 
+            WHERE SBD = ?
+        """
+        
+        cursor.execute(query, sbd)
         row = cursor.fetchone()
         conn.close()
+
+        if row:
+            return row  
+        else:
+            return "⚠️ Không tìm thấy thí sinh này trong dữ liệu."
 
     except Exception as e:
         print(f"❌ Lỗi khi kết nối {node['database']}: {repr(e)}")
