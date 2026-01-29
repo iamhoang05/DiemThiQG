@@ -49,6 +49,6 @@ def get_score(sbd):
         return row # Trả về dữ liệu nếu thành công
         
     except Exception as e:
-        # YÊU CẦU QUAN TRỌNG: Không để ứng dụng Crash, trả về thông báo bảo trì
+        # Trả về thông báo bảo trì
         print(f"Lỗi kết nối tới {node['database']}: {e}")
         return "Khu vực này đang bảo trì"
