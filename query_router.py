@@ -25,36 +25,30 @@ def route_node(sbd):
 
 def get_score(sbd):
     node = route_node(sbd)
-
     if not node:
         return "SBD không hợp lệ!"
 
     try:
-        print(f"Đang kết nối tới {node['database']} ...")
-
-        conn = get_connection(node)
-
-        print(f"Kết nối {node['database']} thành công!")
-
+        # Thử kết nối với timeout ngắn để phát hiện node offline nhanh
+        #conn = get_connection(node) 
+        conn = pyodbc.connect(
+            f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+            f"SERVER={node['server']};"
+            f"DATABASE={node['database']};"
+            f"UID={node['user']};"
+            f"PWD={node['password']};"
+            "TrustServerCertificate=yes;",
+            timeout=3)
         cursor = conn.cursor()
-
-        query = """
-            SELECT HoTen, KhuVuc, DiemToan, DiemVan, DiemAnh, DiemLy, DiemHoa, DiemSinh 
-            FROM ThiSinh 
-            WHERE SBD = ?
-        """
         
+        query = "SELECT HoTen, KhuVuc, DiemToan, DiemVan, DiemAnh, DiemLy, DiemHoa, DiemSinh FROM ThiSinh WHERE SBD = ?"
         cursor.execute(query, sbd)
         row = cursor.fetchone()
         conn.close()
-
-        if row:
-            return row  
-        else:
-            return "Không tìm thấy thí sinh này trong dữ liệu."
-
+        
+        return row # Trả về dữ liệu nếu thành công
+        
     except Exception as e:
-        print(f"Lỗi khi kết nối {node['database']}: {repr(e)}")
-
-
-
+        # YÊU CẦU QUAN TRỌNG: Không để ứng dụng Crash, trả về thông báo bảo trì
+        print(f"Lỗi kết nối tới {node['database']}: {e}")
+        return "Khu vực này đang bảo trì"

@@ -1,28 +1,30 @@
+from flask import Flask, render_template, request
 from query_router import get_score
 
-while True:
-    try:
-        sbd = int(input("Nhập số báo danh (nhấn 0 để thoát): "))
+app = Flask(__name__)
 
-        if sbd == 0:
-            break
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    result_data = None
+    error_msg = None
+    sbd_input = ""
 
-        result = get_score(sbd)
+    if request.method == 'POST':
+        sbd_input = request.form.get('sbd')
+        try:
+            # Chuyển sbd sang int và gọi hàm từ query_router.py
+            result = get_score(int(sbd_input))
 
-        if isinstance(result, str):
-            print(result)
-            continue
-        else:
-            print("\n=== KẾT QUẢ ===")
-            print("Họ và tên:", result[0])
-            print("Khu vực: ", result[1])
-            print("Toán:", result[2])
-            print("Văn:", result[3])
-            print("Anh:", result[4])
-            print("Lý:", result[5])
-            print("Hóa:", result[6])
-            print("Sinh:", result[7])
+            if isinstance(result, str):
+                error_msg = result
+            else:
+                result_data = result
+        except ValueError:
+            error_msg = "Vui lòng nhập số báo danh là chữ số!"
+        except Exception as e:
+            error_msg = f"Lỗi hệ thống: {e}"
 
-    except Exception as e:
-        print(f"Lỗi kết nối: {e}")
+    return render_template('index.html', data=result_data, error=error_msg, sbd=sbd_input)
 
+if __name__ == '__main__':
+    app.run(debug=True)

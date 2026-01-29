@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu Điểm thi Quốc gia 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .navbar { background: linear-gradient(90deg, #004e92 0%, #000428 100%); }
+        .search-card { border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: -50px; }
+        .result-card { border-radius: 15px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .score-box { background-color: #f1f8ff; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #e1e8ed; }
+        .score-value { font-size: 1.5rem; font-weight: bold; color: #004e92; }
+        .region-badge { font-size: 0.9rem; padding: 5px 15px; border-radius: 20px; }
+        .bg-north { background-color: #e3f2fd; color: #0d47a1; }
+        .bg-south { background-color: #fff3e0; color: #e65100; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark pb-5 mb-5">
+        <div class="container py-4 text-center">
+            <h1 class="navbar-brand fs-2 mx-auto"><i class="fas fa-graduation-cap me-2"></i>HỆ THỐNG TRA CỨU ĐIỂM THI 2026</h1>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                
+                <div class="card search-card p-4">
+                    <form method="POST" class="row g-3">
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-id-card"></i></span>
+                                <input type="text" name="sbd" class="form-control border-start-0 ps-0" 
+                                       placeholder="Nhập Số báo danh (1 - 1000)..." value="{{ sbd }}" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                                <i class="fas fa-search me-1"></i> Tra cứu
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if error %}
+                    <div class="alert alert-danger mt-3 mb-0 d-flex align-items-center" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <div>{{ error }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if data %}
+                <div class="card result-card mt-4 p-4 animate__animated animate__fadeIn">
+                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                        <div>
+                            <h2 class="h4 mb-1 text-primary">{{ data[0] }}</h2>
+                            <p class="text-muted mb-0">SBD: <strong>{{ sbd }}</strong></p>
+                        </div>
+                        <span class="region-badge {{ 'bg-north' if 'Bac' in data[1] else 'bg-south' }}">
+                            <i class="fas fa-map-marker-alt me-1"></i> {{ data[1] }}
+                        </span>
+                    </div>
+
+                    <h5 class="mb-3"><i class="fas fa-star me-2 text-warning"></i>Điểm số chi tiết</h5>
+                    <div class="row g-3">
+                        {% set subjects = [
+                            ('Toán', data[2]), ('Văn', data[3]), ('Anh', data[4]),
+                            ('Lý', data[5]), ('Hóa', data[6]), ('Sinh', data[7])
+                        ] %}
+                        
+                        {% for name, score in subjects %}
+                        <div class="col-4 col-sm-2">
+                            <div class="score-box">
+                                <div class="small text-muted">{{ name }}</div>
+                                <div class="score-value">{{ score }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <p class="text-center text-muted mt-5 small">
+                    © 2026 Hệ thống được phát triển trên Python Flask & SQL Server
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
