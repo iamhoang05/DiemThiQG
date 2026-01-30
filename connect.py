@@ -2,7 +2,7 @@ import pyodbc
 
 conn = pyodbc.connect(
     "DRIVER={ODBC Driver 17 for SQL Server};"
-    "SERVER=localhost,1433;"
+    "SERVER=127.0.0.1;"
     "DATABASE=master;"
     "UID=sa;"
     "PWD=Matkhau;"
@@ -10,14 +10,14 @@ conn = pyodbc.connect(
 )
 
 NODE_BAC = {
-    "server": "localhost,1433",
+    "server": "127.0.0.1;",
     "database": "THISINH_BAC",
     "user": "sa",
     "password": "Matkhau"
 }
 
 NODE_NAM = {
-    "server": "localhost,1433",
+    "server": "127.0.0.1;",
     "database": "THISINH_NAM",
     "user": "sa",
     "password": "Matkhau"
