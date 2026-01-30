@@ -2,7 +2,7 @@ import os
 import pyodbc
 from dotenv import load_dotenv
 load_dotenv()
-#lay thong tin
+
 SERVER = os.getenv('DB_SERVER')
 UID = os.getenv('DB_USER')
 PWD = os.getenv('DB_PASSWORD')

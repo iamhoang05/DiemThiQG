@@ -3,80 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tra cứu Điểm thi Quốc gia 2026</title>
+    <title>Tra cứu Điểm thi Quốc gia 2026 - Phân tán & Chịu lỗi</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .navbar { background: linear-gradient(90deg, #004e92 0%, #000428 100%); }
-        .search-card { border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: -50px; }
-        .result-card { border-radius: 15px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .score-box { background-color: #f1f8ff; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #e1e8ed; }
-        .score-value { font-size: 1.5rem; font-weight: bold; color: #004e92; }
-        .region-badge { font-size: 0.9rem; padding: 5px 15px; border-radius: 20px; }
-        .bg-north { background-color: #e3f2fd; color: #0d47a1; }
-        .bg-south { background-color: #fff3e0; color: #e65100; }
+        :root { --primary-dark: #000428; --primary-light: #004e92; --accent-gold: #ffc107; }
+        body { background-color: #f0f2f5; font-family: 'Inter', 'Segoe UI', sans-serif; color: #333; }
+        
+        /* Header */
+        .navbar { background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%); border-bottom: 4px solid var(--accent-gold); }
+        .hero-title { font-weight: 800; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+
+        /* Guide Card */
+        .guide-card { border: none; border-radius: 20px; border-left: 6px solid var(--primary-light); background: #fff; }
+
+        /* Search Section */
+        .search-card { border: none; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); background: white; transition: transform 0.3s ease; }
+        .search-card:hover { transform: translateY(-5px); }
+        .btn-gps { padding: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Results */
+        .result-card { border-radius: 20px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .score-box { background: linear-gradient(145deg, #ffffff, #f1f8ff); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid #e1e8ed; transition: all 0.3s ease; }
+        .score-box:hover { background: #e3f2fd; transform: scale(1.05); }
+        .score-value { font-size: 1.8rem; font-weight: 800; color: var(--primary-light); }
+        .subject-name { font-size: 0.85rem; font-weight: 600; color: #6c757d; text-transform: uppercase; }
+
+        /* Simulator Dashboard (Sidebar Layout) */
+        .simulator-panel {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            position: sticky; /* Giúp bảng đi theo khi cuộn trang */
+            top: 20px;
+            width: 100%;
+        }
+        .simulator-panel h6 { font-weight: 700; color: #444; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .led-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-left: 10px; position: relative; }
+        .led-on { background-color: #28a745; box-shadow: 0 0 10px #28a745; }
+        .led-off { background-color: #dc3545; box-shadow: 0 0 10px #dc3545; }
+        .led-on::after { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; border-radius: 50%; border: 1px solid #28a745; opacity: 0.5; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(2); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-dark pb-5 mb-5">
-        <div class="container py-4 text-center">
-            <h1 class="navbar-brand fs-2 mx-auto"><i class="fas fa-graduation-cap me-2"></i>HỆ THỐNG TRA CỨU ĐIỂM THI 2026</h1>
+    <nav class="navbar navbar-dark pb-5 mb-5 shadow">
+        <div class="container py-5 text-center">
+            <h1 class="navbar-brand fs-1 mx-auto hero-title animate__animated animate__fadeInDown">
+                <i class="fas fa-graduation-cap me-3"></i>TRA CỨU ĐIỂM THI 2026
+            </h1>
+            <p class="text-white-50 small">Hệ thống phân tán chịu lỗi - thực hành SQL Server & Python</p>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                
-                <div class="card search-card p-4">
-                    <form method="POST" class="row g-3">
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-id-card"></i></span>
-                                <input type="text" name="sbd" class="form-control border-start-0 ps-0" 
-                                       placeholder="Nhập Số báo danh (1 - 1000)..." value="{{ sbd }}" required>
+    <div class="container pb-5">
+        <div class="row g-4 justify-content-center">
+            
+            <div class="col-lg-8">
+
+                <div class="card guide-card p-4 mb-4 shadow-sm animate__animated animate__fadeInLeft">
+                    <div class="d-flex align-items-start">
+                        <div class="bg-primary-subtle p-3 rounded-circle me-3">
+                            <i class="fas fa-shield-halved fs-3 text-primary"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-dark mb-2">QUY ĐỊNH PHÂN VÙNG TRUY CẬP</h5>
+                            <p class="text-muted mb-3 small">Hệ thống áp dụng cơ chế xác thực vị trí trạm tại chỗ để đảm bảo tính sẵn sàng cao:</p>
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <div class="p-2 border rounded bg-light small">
+                                        <span class="badge bg-primary me-2">MIỀN BẮC</span> SBD: <strong>001 - 500</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-2 border rounded bg-light small">
+                                        <span class="badge bg-warning text-dark me-2">MIỀN NAM</span> SBD: <strong>501 - 1000</strong>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-sm-3 d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
-                                <i class="fas fa-search me-1"></i> Tra cứu
-                            </button>
+                    </div>
+                </div>
+
+                <div class="card search-card p-4 mb-4 animate__animated animate__fadeInUp">
+                    <form method="POST">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-secondary small text-uppercase mb-3">
+                                    <i class="fas fa-satellite-dish me-2"></i> Xác thực vị trí của bạn
+                                </label>
+                                <div class="btn-group w-100 shadow-sm" role="group">
+                                    <input type="radio" class="btn-check" name="user_region" id="reg_bac" value="BAC" {{ 'checked' if user_region == 'BAC' else '' }}>
+                                    <label class="btn btn-outline-primary btn-gps" for="reg_bac"><i class="fas fa-map-pin me-2"></i>Trạm Miền Bắc</label>
+
+                                    <input type="radio" class="btn-check" name="user_region" id="reg_nam" value="NAM" {{ 'checked' if user_region == 'NAM' else '' }}>
+                                    <label class="btn btn-outline-primary btn-gps" for="reg_nam"><i class="fas fa-map-pin me-2"></i>Trạm Miền Nam</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group input-group-lg shadow-sm border rounded-pill overflow-hidden">
+                                    <span class="input-group-text bg-white border-0 ps-4 text-muted"><i class="fas fa-id-card-clip"></i></span>
+                                    <input type="text" name="sbd" class="form-control border-0 ps-2 fs-5" 
+                                           placeholder="Nhập Số báo danh (Ví dụ: 750)..." value="{{ sbd if sbd else '' }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm fw-bold">
+                                    <i class="fas fa-magnifying-glass me-2"></i>TRA CỨU
+                                </button>
+                            </div>
                         </div>
                     </form>
 
                     {% if error %}
-                    <div class="alert alert-danger mt-3 mb-0 d-flex align-items-center" role="alert">
-                        <i class="fas fa-exclamation-circle me-2"></i>
-                        <div>{{ error }}</div>
+                    <div class="alert alert-danger mt-4 border-0 shadow-sm animate__animated animate__shakeX" role="alert">
+                        <i class="fas fa-circle-exclamation me-2"></i> {{ error }}
                     </div>
                     {% endif %}
                 </div>
 
                 {% if data %}
-                <div class="card result-card mt-4 p-4 animate__animated animate__fadeIn">
-                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                <div class="card result-card p-4 animate__animated animate__zoomIn">
+                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-4">
                         <div>
-                            <h2 class="h4 mb-1 text-primary">{{ data[0] }}</h2>
-                            <p class="text-muted mb-0">SBD: <strong>{{ sbd }}</strong></p>
+                            <h2 class="display-6 fw-bold text-primary mb-0">{{ data[0] }}</h2>
+                            <span class="text-muted">Số báo danh: <span class="badge bg-light text-dark border">{{ sbd }}</span></span>
                         </div>
-                        <span class="region-badge {{ 'bg-north' if 'Bac' in data[1] else 'bg-south' }}">
-                            <i class="fas fa-map-marker-alt me-1"></i> {{ data[1] }}
-                        </span>
+                        <div class="text-end">
+                            <span class="region-badge {{ 'bg-north' if 'Bac' in data[1] else 'bg-south' }} shadow-sm">
+                                <i class="fas fa-location-dot me-2"></i>{{ data[1] }}
+                            </span>
+                        </div>
                     </div>
 
-                    <h5 class="mb-3"><i class="fas fa-star me-2 text-warning"></i>Điểm số chi tiết</h5>
                     <div class="row g-3">
                         {% set subjects = [
-                            ('Toán', data[2]), ('Văn', data[3]), ('Anh', data[4]),
-                            ('Lý', data[5]), ('Hóa', data[6]), ('Sinh', data[7])
+                            ('Toán', data[2], 'fa-calculator'), ('Văn', data[3], 'fa-book-open'), ('Anh', data[4], 'fa-language'),
+                            ('Lý', data[5], 'fa-atom'), ('Hóa', data[6], 'fa-flask'), ('Sinh', data[7], 'fa-dna')
                         ] %}
                         
-                        {% for name, score in subjects %}
-                        <div class="col-4 col-sm-2">
-                            <div class="score-box">
-                                <div class="small text-muted">{{ name }}</div>
+                        {% for name, score, icon in subjects %}
+                        <div class="col-6 col-sm-4 col-md-2 text-center">
+                            <div class="score-box shadow-sm">
+                                <div class="subject-name mb-2"><i class="fas {{ icon }} me-1"></i>{{ name }}</div>
                                 <div class="score-value">{{ score }}</div>
                             </div>
                         </div>
@@ -84,14 +159,65 @@
                     </div>
                 </div>
                 {% endif %}
-
-                <p class="text-center text-muted mt-5 small">
-                    © 2026 Hệ thống được phát triển trên Python Flask & SQL Server
-                </p>
             </div>
+
+            <div class="col-lg-3">
+                <div class="simulator-panel animate__animated animate__fadeInRight shadow">
+                    <h6 class="mb-4"><i class="fas fa-microchip me-2 text-warning"></i>QUẢN TRỊ NODE</h6>
+                    
+                    <div class="node-control mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small fw-bold text-uppercase">Miền Bắc</span>
+                            <span id="led-BAC" class="led-indicator {{ 'led-on' if node_status['BAC'] else 'led-off' }}"></span>
+                        </div>
+                        <div class="btn-group w-100 btn-group-sm">
+                            <button onclick="toggleNode('BAC', 'on')" class="btn btn-success border-0">BẬT</button>
+                            <button onclick="toggleNode('BAC', 'off')" class="btn btn-danger border-0">TẮT</button>
+                        </div>
+                    </div>
+
+                    <div class="node-control mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small fw-bold text-uppercase">Miền Nam</span>
+                            <span id="led-NAM" class="led-indicator {{ 'led-on' if node_status['NAM'] else 'led-off' }}"></span>
+                        </div>
+                        <div class="btn-group w-100 btn-group-sm">
+                            <button onclick="toggleNode('NAM', 'on')" class="btn btn-success border-0">BẬT</button>
+                            <button onclick="toggleNode('NAM', 'off')" class="btn btn-danger border-0">TẮT</button>
+                        </div>
+                    </div>
+
+                    <div id="miniStatus" class="bg-dark text-warning p-2 rounded x-small mt-2 font-monospace" style="font-size: 0.7rem;">
+                        > Hệ thống đã sẵn sàng
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleNode(region, action) {
+            const statusDiv = document.getElementById('miniStatus');
+            statusDiv.innerText = `> Connecting...`;
+
+            fetch('/manage_db', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({region: region, action: action})
+            })
+            .then(res => res.json())
+            .then(data => {
+                statusDiv.innerText = `> ${data.message}`;
+                const led = document.getElementById('led-' + region);
+                led.className = action === 'on' ? 'led-indicator led-on' : 'led-indicator led-off';
+            })
+            .catch(err => {
+                alert("Lỗi: " + err.message);
+                statusDiv.innerText = "> Failed_";
+            });
+        }
+    </script>
 </body>
 </html>
