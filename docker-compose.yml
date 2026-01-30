@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql_server
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Matkhau@123
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+      - ./mssql:/usr/config
+
+  db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql_init
+    depends_on:
+      - db
+    volumes:
+      - ./mssql:/usr/config
+    environment:
+      - MSSQL_SA_PASSWORD=Matkhau@123
+    entrypoint: /bin/bash /usr/config/import-data.sh
+
+volumes:
+  mssql_data:
